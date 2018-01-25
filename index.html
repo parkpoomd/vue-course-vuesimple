@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue js</title>
+        <script src="js/vue.js"></script>
+    </head>
+    <body>
+        
+        <style>
+            #app {
+                width: 990px;
+                margin: 50px auto;
+            }
+            h1, ul {
+                padding: 0;
+                margin: 0;
+                margin-bottom: 20px;
+            }
+            #add-tag ul li {
+                background-color: #dddddd;
+                list-style: none;
+                display: inline-block;
+                padding: 10px 40px;
+                margin: 5px 10px 5px 0;
+                position: relative;
+            }
+            #add-tag span {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background-color: #a5a5a5;
+                padding: 5px 8px;
+            }
+            a {
+                text-decoration: none;
+                color: #555;
+                cursor: pointer;
+            }
+            
+            input {
+                height: 50px;
+                width: 400px;
+                font-size: 32px;
+                padding-left: 10px;
+            }
+            
+            
+            #suggess-tag ul {
+                display: inline-block;
+                width: 413px;
+                list-style: none;
+                border: 1px solid #dddddd;
+            }
+            #suggess-tag ul li {
+                border-bottom: 1px solid #dddddd;
+            }
+            #suggess-tag a {
+                display: inline-block;
+                width: 405px;
+                padding: 8px 0 8px 10px;
+            }
+            
+            input.btn-submit {
+                cursor: pointer;
+                border-style: none;
+                background-color: aquamarine;
+                width: 150px;
+            }
+        </style>
+        
+        <div id="app">
+            
+            <h1>Tags:</h1>
+            
+            <div id="add-tag">
+                <ul>
+                    <li v-for="tag in tags"><a>{{ tag }}<span v-on:click="deleteTag(tag)">x</span></a></li>
+                </ul>
+            </div>
+            
+            <input type="text" v-model.trim="tagName" v-on:keyup.enter="addTag(tagName)">
+            <input type="submit" value="Add" class="btn-submit" v-on:click="addTag(tagName)">
+            
+            <div id="suggess-tag">
+                <ul>
+                    <li v-for="tag in filteredTags" v-if="tagName != ''">
+                        <a href="#" v-on:click="addTag(tag)">{{ tag }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <script>
+            
+            new Vue({
+                el: '#app',
+                data: {
+                    tags: [],
+                    tagName: '',
+                    suggessTags: [ 'design', 'ux', 'ui', 'application', 'mobile', 'car', 'dog', 'cat', 'docker', 'andriod', 'google' ]
+                },
+                computed: {
+                    filteredTags: function () {
+                        var self = this
+                        return self.suggessTags.filter(function (tag) {
+                            return tag.indexOf(self.tagName) !== -1
+                        }).slice(0, 10)
+                    }
+                },
+                methods: {
+                    addTag: function(tag){
+                        if (this.tagName === '' || tag === '') {
+                            return
+                        }
+                        
+                        for (i = 0; i < this.tags.length; i++) {
+                            if (tag === this.tags[i]) {
+                                this.tagName = '';
+                                return
+                            }
+                        }
+                        this.tags.push(tag);
+                        this.tagName = '';
+                    },
+                    deleteTag: function(tag){
+                        this.tags.splice(this.tags.indexOf(tag), 1);
+                    }
+                }
+            })
+            
+        </script>
+        
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
